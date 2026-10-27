@@ -1,0 +1,341 @@
+:root {
+  /* Same purple palette as the CalVEX and USVEX dashboards — the VEX
+     family shares one visual system, so LaVEX inherits it rather than
+     introducing a fourth hue. */
+  --lavex-purple-light: #c8b8e2;
+  --lavex-purple-mid: #CEA9EA;
+  --lavex-purple-hover: #B08FD4;
+  --lavex-purple-active: #8E6FB0;
+  --lavex-purple-deep: #6b558e;
+  --lavex-purple-border: rgba(107, 85, 142, 0.35);
+  --lavex-border: #e5e7eb;
+  --lavex-muted: #6b7280;
+  /* Same Google Fonts stand-ins as the USVEX dashboard — see the <link>
+     comment in index.html for what they stand in for. */
+  --lavex-font: "Plus Jakarta Sans", sans-serif;
+  /* Same family as the body font, not a separate display face — Fredoka
+     read too punchy/rounded for the heading role, so headings instead lean
+     on Plus Jakarta Sans's boldest weight (800) at a larger size. */
+  --lavex-font-heading: "Plus Jakarta Sans", sans-serif;
+  --lavex-font-accent: "Caveat", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--lavex-font);
+  background: #fff;
+  color: #111;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="checkbox"] { accent-color: var(--lavex-purple-active); }
+input[type="range"] { accent-color: var(--lavex-purple-deep); }
+
+/* ---- header ---- */
+.lavex-header {
+  background-color: var(--lavex-purple-light);
+  border-bottom: 1px solid var(--lavex-purple-border);
+  padding: 0.4rem 1.1rem;
+  flex-shrink: 0;
+}
+.lavex-app-title-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: #000;
+  font-family: var(--lavex-font-heading);
+  font-weight: 800;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.lavex-app-title-link:hover { opacity: 0.85; }
+.lavex-logo { height: 2.94rem; width: auto; display: block; flex-shrink: 0; }
+
+/* ---- top control bar ---- */
+.lavex-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.8rem 1.35rem;
+  padding: 0.8rem 1.25rem;
+  background: var(--lavex-purple-light);
+  border-bottom: 1px solid var(--lavex-purple-border);
+  flex-shrink: 0;
+}
+.lavex-control { display: flex; flex-direction: column; }
+.lavex-control label {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+}
+.lavex-control select {
+  font-family: var(--lavex-font);
+  font-size: 0.875rem;
+  padding: 0.42rem 0.55rem;
+  border: 1px solid #cfc4e2;
+  border-radius: 0.375rem;
+  background: #fff;
+  min-width: 150px;
+  max-width: 260px;
+}
+.lavex-control select:disabled {
+  color: #9aa5b1;
+  background: #f2f4f6;
+}
+.lavex-control-divided {
+  border-left: 1px solid var(--lavex-purple-border);
+  padding-left: 1.35rem;
+}
+.lavex-control-slider { flex: 1 1 220px; min-width: 190px; margin-left: auto; }
+.lavex-control-slider input[type="range"] { width: 100%; margin: 0.55rem 0 0.3rem; }
+#scale_max_value {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--lavex-purple-deep);
+}
+
+/* ---- collapse toggle (chart controls bar) ---- */
+.lavex-bar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--lavex-purple-light);
+  border: none;
+  border-bottom: 1px solid var(--lavex-purple-border);
+  padding: 0.5rem 1rem;
+  font-family: var(--lavex-font);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #000;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.lavex-bar-toggle:hover { background: #DDD0EF; }
+.lavex-bar-toggle .caret { transition: transform 0.15s ease; }
+.lavex-bar-toggle.closed .caret { transform: rotate(-90deg); }
+.lavex-topbar.collapsed { display: none; }
+
+/* ---- layout: sidebar (Overall/subcategory toggles + Location) + main ---- */
+.lavex-body {
+  display: flex;
+  /* stretch (the default) makes the sidebar match the taller main column's
+     height, so its purple background runs the full page instead of
+     stopping wherever the sidebar's own (shorter) content ends */
+  align-items: stretch;
+  /* fills whatever viewport height header/topbar don't use (body is a flex
+     column with min-height: 100vh), so on short pages the sidebar/main
+     columns extend to the bottom of the screen instead of leaving a white
+     gap below them */
+  flex: 1 1 auto;
+}
+.lavex-sidebar-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  flex-shrink: 0;
+  background-color: var(--lavex-purple-light);
+  border-right: 1px solid var(--lavex-purple-border);
+}
+.lavex-sidebar-wrap.collapsed { width: auto; }
+.lavex-sidebar-wrap.collapsed .lavex-sidebar { display: none; }
+.lavex-sidebar-wrap.collapsed .lavex-bar-toggle { border-bottom: none; }
+.lavex-sidebar { padding: 0.75rem 0.8rem 1rem; }
+.lavex-sidebar-checks { padding: 0.15rem 0.15rem 0.65rem; }
+
+.lavex-check {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  cursor: pointer;
+}
+
+/* accordion via <details> (Location in the sidebar; Notes below the
+   Demographic Specifics section) */
+.lavex-acc {
+  border: 1px solid var(--lavex-purple-border);
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  background-color: var(--lavex-purple-light);
+}
+.lavex-acc summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.7rem 0.9rem;
+  user-select: none;
+}
+.lavex-acc summary::-webkit-details-marker { display: none; }
+.lavex-acc summary::after { content: " \25BE"; float: right; }
+.lavex-acc[open] summary { background-color: var(--lavex-purple-mid); }
+.lavex-acc[open] summary::after { content: " \25B4"; }
+.lavex-acc summary:hover { background-color: #DDD0EF; }
+.lavex-acc-body { padding: 0.25rem 0.9rem 0.9rem; }
+
+/* filter groups */
+.lavex-filter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 1rem 0 0.35rem;
+}
+.lavex-filter-group:first-child .lavex-filter-head { margin-top: 0.6rem; }
+.lavex-filter-label { font-weight: 600; font-size: 0.92rem; }
+.lavex-filter-links a {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--lavex-purple-deep);
+  text-decoration: none;
+  margin-left: 0.6rem;
+}
+.lavex-filter-links a:hover { text-decoration: underline; }
+.lavex-filter-group .lavex-check {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin-bottom: 0.35rem;
+}
+.lavex-filter-help {
+  display: block;
+  font-size: 0.78rem;
+  color: #3f3a4d;
+  margin-top: 0.45rem;
+}
+
+.lavex-notes-list {
+  font-size: 0.85rem;
+  padding-left: 1.1rem;
+  color: #222;
+  margin: 0.5rem 0 0;
+}
+.lavex-notes-list li { margin-bottom: 0.3rem; }
+
+.lavex-cite {
+  padding: 0.5rem 0.15rem;
+  font-size: 0.75rem;
+  color: #333;
+  line-height: 1.5;
+}
+.lavex-cite a { color: var(--lavex-purple-deep); }
+.lavex-credit {
+  margin: 0.5rem 0 0;
+  font-size: 0.72rem;
+  color: var(--lavex-muted);
+}
+
+/* ---- main chart area ---- */
+.lavex-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: #fff;
+  padding: 8px 16px 24px;
+}
+.lavex-chart { width: 100%; }
+.lavex-validation {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--lavex-muted);
+  font-size: 1rem;
+}
+.lavex-footnotes {
+  border-top: 1px solid #eef0f3;
+  padding: 0.6rem 0.25rem 0.5rem;
+}
+.lavex-footnotes p {
+  margin: 0.25rem 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+/* ---- refine population: filters, moved below the chart instead of a
+   persistent sidebar. Collapsed by default — reuses the same
+   button+caret toggle as "Chart controls"/"Filters" rather than a new
+   pattern, and the bordered-box look of .lavex-acc, so it reads as one
+   more collapsible panel consistent with the rest of the page. ---- */
+.lavex-refine {
+  margin-top: 1.5rem;
+  border: 1px solid var(--lavex-purple-border);
+  border-radius: 0.375rem;
+  overflow: hidden;
+  background-color: var(--lavex-purple-light);
+}
+.lavex-refine-toggle {
+  border-bottom: 1px solid var(--lavex-purple-border);
+}
+.lavex-refine.collapsed .lavex-refine-toggle { border-bottom: none; }
+.lavex-refine.collapsed .lavex-refine-body { display: none; }
+.lavex-refine-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.75rem;
+  text-align: left;
+}
+.lavex-refine-label {
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #000;
+}
+.lavex-refine-body { padding: 1.1rem 1rem 0.5rem; background: #fff; }
+.lavex-refine-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: 1rem;
+}
+.lavex-refine-grid .lavex-filter-group {
+  flex: 1 1 190px;
+  max-width: 260px;
+}
+/* Every group's heading needs the same top margin so headings in the same
+   row line up. The :first-child rule above (margin-top: 0.6rem) still does
+   real work for the Location accordion in the sidebar, so it can't just be
+   deleted — but its 3-class-selector specificity beats a plain
+   ".lavex-refine-grid .lavex-filter-head" rule regardless of source order,
+   so it was still winning for "Gender" (the grid's actual first child) and
+   sitting it lower than "Sexuality"/"Age"/etc. beside it. Repeating the
+   :first-child selector here, scoped to the grid, matches that specificity
+   and wins. */
+.lavex-refine-grid .lavex-filter-head,
+.lavex-refine-grid .lavex-filter-group:first-child .lavex-filter-head {
+  margin-top: 0;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  .lavex-control-divided { border-left: none; padding-left: 0; }
+  .lavex-control-slider { margin-left: 0; }
+  .lavex-control { flex: 1 1 calc(50% - 0.9rem); min-width: 0; }
+  .lavex-control select { width: 100%; max-width: none; }
+}
+@media (max-width: 768px) {
+  .lavex-body { flex-direction: column; }
+  .lavex-sidebar-wrap {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--lavex-purple-border);
+  }
+  .lavex-app-title-link { font-size: 1rem; }
+  .lavex-logo { height: 2.1rem; }
+  .lavex-refine-grid { gap: 1.25rem 1.5rem; }
+  .lavex-refine-grid .lavex-filter-group { flex: 1 1 140px; }
+}
