@@ -49,40 +49,47 @@ side by side.
 - **Download** any chart as a PNG with the camera icon in the chart toolbar.
   The house icon resets the dashboard to its defaults.
 
+## Live dashboard
+
+**https://varickjh.github.io/lavex-dashboard/** (hosted on GitHub Pages from
+the `main` branch).
+
 ## Running it locally
 
-The dashboard is a set of static files: no server-side code and no build
-step for the page itself. It does need one generated data file, `data.js`,
-which is **not included in this repository** because it contains
-respondent-level survey records.
+The dashboard is a set of static files with no server-side code. Serve the
+folder and open it in a browser:
 
-1. Place the source data files in a `data/` folder:
+```bash
+python3 -m http.server 8124
+```
+
+Then visit http://localhost:8124.
+
+## Updating the data
+
+`data.js` is generated from the source survey files. To rebuild it after
+the source data changes:
+
+1. Place the source data files in a `data/` folder (not included in this
+   repository):
    - `data/ICPSR_199088-V1.1/LaVEX2023 OpenICPSR dataset v1.dta` (2023,
      available from openICPSR, project 199088)
    - `data/[P003] UCSD_Tulane_LA_VEX_Survey_2025_data.dta` (2025)
-2. Generate `data.js`:
+2. Rebuild:
 
    ```bash
    pip install -r requirements.txt
    python3 build_data.py
    ```
 
-3. Serve the folder and open it in a browser:
-
-   ```bash
-   python3 -m http.server 8124
-   ```
-
-   Then visit http://localhost:8124.
-
-Re-run `python3 build_data.py` whenever the source data files change.
+3. Commit the new `data.js` and push to `main`; GitHub Pages redeploys
+   automatically.
 
 ## Embedding
 
-Host the files on any static web host (GitHub Pages, Netlify, S3, or a
-WordPress server), including the generated `data.js`. Then either embed
-`index.html` in an iframe or paste its markup into a WordPress Custom HTML
-block.
+To embed the dashboard in another site (for example WordPress), use an
+iframe pointing at the live URL above, or host the same files on any static
+web host.
 
 ## Files
 
@@ -91,6 +98,7 @@ block.
 | `index.html` | The dashboard page |
 | `style.css` | Styling |
 | `app.js` | Filtering, weighting, and chart drawing |
+| `data.js` | Survey data used by the dashboard (generated) |
 | `build_data.py` | Generates `data.js` from the source survey files |
 | `logo.png`, `logo-lockup.png` | LaVEX logo (original, and the version shown in the header) |
 
